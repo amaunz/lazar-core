@@ -207,7 +207,6 @@ vector<shared_ptr<FeatMol < MolType, FeatureType, ActivityType > > > MolVect<Mol
 
     for (cur_mol=compounds.begin();cur_mol!=compounds.end();cur_mol++) {
         if ((*cur_mol)->equal(test_comp)) {
-            cerr << "Dup: " << (*cur_mol)->get_id() << endl;
             (*cur_mol)->copy_activities(test_comp); // copy database activities to test structure (for external predictions)
             duplicates.push_back((*cur_mol));
             (*cur_mol)->remove();
