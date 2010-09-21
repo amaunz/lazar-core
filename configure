@@ -76,4 +76,29 @@ if [ $status == 1 ]; then
     echo "WARNING: At least one variable could not be set (see output above). You will not be able to compile."
 fi
 
+# configure R
+which R > /dev/null 2>&1
+if [ $? -gt 0  ]; then
+  echo "R not found."
+  exit 1
+fi
+
+if [ ! -d $HOME/.R ]; then
+    mkdir $HOME/.R
+fi
+
+if [ ! -e $HOME/.Renviron ]; then
+  echo "R_LIBS=\"$HOME/.R\"" > $HOME/.Renviron
+else
+  if [ -z `grep "R_LIBS" $HOME/.Renviron | wc -l` ]; then
+    echo "R_LIBS=\"$HOME/.R\"" >> $HOME/.Renviron
+  fi
+fi
+
+if [ ! -f kernlab_0.9-5.tar.gz ]; then
+  wget http://cran.r-project.org/src/contrib/Archive/kernlab/kernlab_0.9-5.tar.gz
+fi
+R CMD INSTALL kernlab_0.9-5.tar.gz
+status=$?
+
 exit $status
