@@ -21,7 +21,7 @@ SERVER_OBJ = ServerSocket.o Socket.o
 OBJ += $(SERVER_OBJ)
 
 CC            = g++
-INCLUDE       = $(INCLUDE_OB) $(INCLUDE_GSL) 
+INCLUDE       = $(INCLUDE_OB) $(INCLUDE_GSL) $(INCLUDE_R)
 CXXFLAGS      = -g $(INCLUDE) -Wall -fPIC
 LIBS	      = -lm -ldl -lopenbabel -lgslcblas -lgsl -lRblas -lRlapack -lR 
 LDFLAGS       = $(LDFLAGS_OB) $(LDFLAGS_GSL)
