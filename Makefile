@@ -6,57 +6,54 @@ FEAT_GEN = rex linfrag smarts-features
 TOOLS = chisq-filter #pcprop
 INSTALLDIR = /usr/local/bin
 
+INCLUDE_OB  =  -I/usr/local/include/openbabel-2.0  
+INCLUDE_GSL  =   
+INCLUDE_R = -I/usr/share/R/include
+LDFLAGS_OB  =  -L/usr/local/lib  
+LDFLAGS_GSL  =   
+LDFLAGS_R =
+
+
+# Normally no edit needed below
 OBJ = feature.o lazmol.o io.o rutils.o
 HEADERS = lazmolvect.h feature.h lazmol.h io.h ServerSocket.h Socket.h feature-generation.h rutils.h
 SERVER_OBJ = ServerSocket.o Socket.o
 OBJ += $(SERVER_OBJ)
 
 CC            = g++
-#CXXFLAGS      = -g -O2 -I/usr/include/openbabel-2.0/ -I../R-2.8.0/include/ -I../gsl-1.9/bin/include/ -Wall
-INCLUDE       = -I/usr/local/include/openbabel-2.0/ -I/usr/local/include/fminer -I/usr/share/R/include
+INCLUDE       = $(INCLUDE_OB) $(INCLUDE_GSL) 
 CXXFLAGS      = -g $(INCLUDE) -Wall -fPIC
 LIBS	      = -lm -ldl -lopenbabel -lgslcblas -lgsl -lRblas -lRlapack -lR 
-LDFLAGS       = -L/usr/local/lib
-#LDFLAGS       = -L../gsl-1.9/bin/lib -L../R-2.8.0/lib -L../R-2.8.0/bin/lib64/R/modules/
-#RPATH         = -Wl,-rpath=/home/am/validations/libfminer
+LDFLAGS       = $(LDFLAGS_OB) $(LDFLAGS_GSL)
 SWIG          = swig
-SWIGFLAGS     = -c++ -ruby
-RUBY_INC      = -I/usr/lib/ruby/1.8/i486-linux/
-
-%.cxx: %.i
-	$(SWIG) $(SWIGFLAGS) -o $@ $^
-lazar_wrap.o: lazar_wrap.cxx
-	$(CC) $(RUBY_INC) $(INCLUDE) -c -o $@ $^
-lazar.so: lazar_wrap.o $(OBJ)
-	$(CC) -shared $(CXXFLAGS) $(LIBS) $(LDFLAGS) $^ /usr/local/lib/libopenbabel.so /usr/lib/libgsl.so -o $@
 
 .PHONY:
-all: $(PROGRAM) $(FEAT_GEN) $(TOOLS)
+all: $(PROGRAM)
 
 .PHONY:
 doc: Doxyfile
 	doxygen Doxyfile
 
 lazar: $(OBJ)  lazar.o 
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o lazar $(OBJ)  lazar.o 
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o lazar $(OBJ)  lazar.o 
 
 linfrag: $(OBJ) linfrag.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o linfrag $(OBJ) linfrag.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o linfrag $(OBJ) linfrag.o
 
 pcprop: $(OBJ) pcprop.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o pcprop $(OBJ) pcprop.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o pcprop $(OBJ) pcprop.o
 
 rex: $(OBJ) rex.o
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o rex $(OBJ) rex.o
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o rex $(OBJ) rex.o
 
 chisq-filter: $(OBJ)  chisq-filter.o 
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o chisq-filter $(OBJ)  chisq-filter.o 
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o chisq-filter $(OBJ)  chisq-filter.o 
 
 smarts-features: $(OBJ)  smarts-features.o 
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o smarts-features $(OBJ)  smarts-features.o 
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o smarts-features $(OBJ)  smarts-features.o 
 
 testset: $(OBJ)  testset.o 
-	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) $(RPATH) -o testset $(OBJ)  testset.o 
+	$(CC) $(CXXFLAGS) $(INCLUDE) $(LIBS) $(LDFLAGS) -o testset $(OBJ)  testset.o 
 
 chisq-filter.o: $(HEADERS) activity-db.h feature-db.h 
 

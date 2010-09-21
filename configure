@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# configure
+# (c) 2010 by Andreas Maunz, andreas@maunz.de, feb 2010
+
+# This file is part of LibBbrc (libbbrc).
+#
+# LibBbrc is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# LibBbrc is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with LibBbrc. If not, see <http://www.gnu.org/licenses/>.
+
+
+# REQUIRED PACKAGES
+packs=( "openbabel-2.0" "gsl" )
+# ADJUST COMPILER PATH:
+cflags_k=( "INCLUDE_OB" "INCLUDE_GSL" "INCLUDE_R" )
+# ADJUST LINKER PATH:
+libs_k=( "LDFLAGS_OB" "LDFLAGS_GSL" )
+ruby_ver="1.8"
+
+echo 
+echo "HOW TO CONFIGURE RUBY:"
+echo "Usage:      $0 [RUBY_VER]"
+echo "Default is: $0 1.8"
+echo "If nothing is found, run updatedb as root and try again!"
+echo
+
+# GET VALUES
+status=0
+for i in `echo "0 1"`; do
+    cflags=`pkg-config --cflags "${packs[$i]}"`
+    if [ $? == 1 ]; then  
+        cflags="${packs[$i]} NOT FOUND"
+        status=1
+    fi
+    sed -i "s,^${cflags_k[$i]}.*,${cflags_k[$i]}  =  $cflags,g" Makefile
+    echo ${cflags_k[$i]} = $cflags
+    
+    libs=`pkg-config --libs-only-L "${packs[$i]}"`
+    if [ $? == 1 ]; then  
+        libs="${packs[$i]} NOT FOUND"
+        status=1
+    fi
+    sed -i "s,^${libs_k[$i]}.*,${libs_k[$i]}  =  $libs,g" Makefile
+    echo ${libs_k[$i]} = $libs
+done
+
+# GET RUBY
+if [ $# = 1 ]; then
+    ruby_ver=$1
+fi
+
+cflags_ruby=`locate -b '\ruby.h' | grep "$ruby_ver" | head -1`
+if [ -z $cflags_ruby ]; then
+    cflags_ruby="$ruby_ver NOT FOUND"
+    status=1
+fi
+
+cflags_ruby="-I`dirname $cflags_ruby`"
+sed -i "s,^INCLUDE_RB.*,INCLUDE_RB  = $cflags_ruby,g" Makefile
+sed -i "s,^RUBY.*,RUBY = ruby$ruby_ver,g" Makefile
+echo "INCLUDE_RB  =  $cflags_ruby"
+echo "RUBY = ruby$ruby_ver"
+
+if [ $status == 1 ]; then
+    echo
+    echo "WARNING: At least one variable could not be set (see output above). You will not be able to compile."
+fi
+
+exit $status
