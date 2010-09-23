@@ -17,7 +17,7 @@ box:~$ aptitude install libgsl0-dev libgfortran1-dev build-essential
 Compilation
 ===========
 
-svn checkout svn://www.in-silico.de/lazar/trunk (obviously you have already done this)
-cd trunk/ && make
+./configure
+make
 
 After successful compilation, you should have created (among others) the executable lazar in the current directory.
