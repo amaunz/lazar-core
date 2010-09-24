@@ -22,7 +22,7 @@
 # REQUIRED PACKAGES
 packs=( "openbabel-2.0" "gsl" )
 # ADJUST COMPILER PATH:
-cflags_k=( "INCLUDE_OB" "INCLUDE_GSL" "INCLUDE_R" )
+cflags_k=( "INCLUDE_OB" "INCLUDE_GSL" )
 # ADJUST LINKER PATH:
 libs_k=( "LDFLAGS_OB" "LDFLAGS_GSL" )
 ruby_ver="1.8"
