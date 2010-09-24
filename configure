@@ -98,7 +98,12 @@ fi
 if [ ! -f kernlab_0.9-5.tar.gz ]; then
   wget http://cran.r-project.org/src/contrib/Archive/kernlab/kernlab_0.9-5.tar.gz
 fi
-R CMD INSTALL kernlab_0.9-5.tar.gz
-status=$?
+if [ ! -f $HOME/.R/kernlab/libs/kernlab.so ]; then
+  R CMD INSTALL kernlab_0.9-5.tar.gz
+  if [ $? -gt 0 ]; then
+    echo "Kernlab install failed."
+    exit 1
+  fi
+fi
 
 exit $status
