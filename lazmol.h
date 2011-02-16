@@ -1097,7 +1097,7 @@ float FeatMol<MolType,FeatureType,ActivityType>::get_similarity(sMolRef m2, stri
     }
 
     tanimoto = 0.0;
-    if (suni.size() > 1) {
+    if (suni.size() > 0) {
         // intersect significance endowed features with common features
         sort(suni.begin(),suni.end(),greater_p<FeatureType>());
         sort(iv.begin(),iv.end(),greater_p<FeatureType>());
