@@ -151,34 +151,34 @@ require 'rsruby'
     summary.flush
     summary.close
     
-    n = 0
-    true_predictions = 0
-    pl_confs = []
-    pl_cas = []
-    prediction_confidences.each { |p|
-      n += 1
-      true_predictions += 1 if p[2]
-      ca = true_predictions.to_f/n
-      pl_confs << p[1]
-      pl_cas << ca
-    }
+  #  n = 0
+  # true_predictions = 0
+  #  pl_confs = []
+  #  pl_cas = []
+  #  prediction_confidences.each { |p|
+  #    n += 1
+  #    true_predictions += 1 if p[2]
+  #    ca = true_predictions.to_f/n
+  #    pl_confs << p[1]
+  #    pl_cas << ca
+  #  }
 
     # plot confidence vs wa
     
-    cmax = 0.0
-    pl_confs.each { |c|
-        cmax=c if c>cmax
-    }
-    r = RSRuby.instance
+  #  cmax = 0.0
+  #  pl_confs.each { |c|
+  #      cmax=c if c>cmax
+  #  }
+  #  r = RSRuby.instance
 
-    r.png({'filename'=>figurebasename+'.png', 'width'=>420, 'height'=>480})
-    r.plot({'x'=>pl_confs, 'y'=>pl_cas, 'type'=>'n', 'ylab'=>'Predictive accuracy', 'ylim'=>[0.5,1], 'xlab'=>'Confidence', 'xlim'=>[cmax,3e-03] })
-    r.rect(cmax, 0.5, ad_conf, 1, {'col'=>'grey', 'border'=>'NA'})
-    r.lines(pl_confs,pl_cas)
-    r.points(pl_confs,pl_cas)
-    r.text(cmax,0.55,'Applicability domain', {'pos'=>4})
-    r.text(cmax,0.52,"(Fraction #{ad_threshold})", {'pos'=>4})
-    r.dev_off.call
+  #   r.png({'filename'=>figurebasename+'.png', 'width'=>420, 'height'=>480})
+  #  r.plot({'x'=>pl_confs, 'y'=>pl_cas, 'type'=>'n', 'ylab'=>'Predictive accuracy', 'ylim'=>[0.5,1], 'xlab'=>'Confidence', 'xlim'=>[cmax,3e-03] })
+  #  r.rect(cmax, 0.5, ad_conf, 1, {'col'=>'grey', 'border'=>'NA'})
+  #  r.lines(pl_confs,pl_cas)
+  #  r.points(pl_confs,pl_cas)
+  #  r.text(cmax,0.55,'Applicability domain', {'pos'=>4})
+  #  r.text(cmax,0.52,"(Fraction #{ad_threshold})", {'pos'=>4})
+  #  r.dev_off.call
 
 #    r.postscript({'file'=>figurebasename+'.ps', 'width'=>420, 'height'=>480})
 #    r.plot({'x'=>pl_confs, 'y'=>pl_cas, 'type'=>'n', 'ylab'=>'Predictive accuracy', 'ylim'=>[0.5,1], 'xlab'=>'Confidence', 'xlim'=>[cmax,3e-03], 'cex.axis'=> 2.5, 'cex.lab' => 2.5, 'font' => 2, 'font.lab' => 2 })
